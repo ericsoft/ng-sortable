@@ -844,7 +844,7 @@
               placeHolder.css('display', 'block');
             }
             if (!targetScope.sortableScope.options.clone) {
-              targetElement[0].parentNode.insertBefore(placeHolder[0], targetElement[0]);
+              targetElement.before(placeHolder);
               dragItemInfo.moveTo(targetScope.sortableScope, targetScope.index());
             }
           }
@@ -979,20 +979,30 @@
            * @param targetElement the target element to check with.
            * @returns {*} -1 if placeholder is not present, index if yes.
            */
-          placeHolderIndex = function (targetElement) {
-            var itemElements, i;
+          placeHolderIndex = function (targetElement) {            
             // targetElement is placeHolder itself, return index 0
             if (targetElement.hasClass(sortableConfig.placeHolderClass)){
               return 0;
             }
+
             // find index in target children
+            var itemElements = targetElement.children();
             itemElements = targetElement.children();
             for (i = 0; i < itemElements.length; i += 1) {
-              //TODO may not be accurate when elements contain other siblings than item elements
-              //solve by adding 1 to model index of previous item element
-              if (angular.element(itemElements[i]).hasClass(sortableConfig.placeHolderClass)) {
-                return i;
+              var $itemElement = angular.element(itemElements[i]);
+              if (!$itemElement.hasClass(sortableConfig.itemClass)
+                  && !$itemElement.hasClass(sortableConfig.placeHolderClass)
+                  && !$itemElement.hasClass(sortableConfig.hiddenClass)) {
+                  // Element not included into sortable list so we could skip in the count
+                  continue;
               }
+
+              // Placeholder found
+              if ($itemElement.hasClass(sortableConfig.placeHolderClass)) {
+                  return placeholderIndex;
+              }
+
+              placeholderIndex++;
             }
             return -1;
           };
