@@ -988,7 +988,7 @@
             // find index in target children
             var itemElements = targetElement.children();
             itemElements = targetElement.children();
-            for (i = 0; i < itemElements.length; i += 1) {
+            for (var i = 0; i < itemElements.length; i += 1) {
               var $itemElement = angular.element(itemElements[i]);
               if (!$itemElement.hasClass(sortableConfig.itemClass)
                   && !$itemElement.hasClass(sortableConfig.placeHolderClass)
